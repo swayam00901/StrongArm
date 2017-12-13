@@ -1,0 +1,67 @@
+
+<div class="login-page" [@routerTransition]>
+   
+    <div class="row justify-content-md-center">
+        <div class="col-md-4">
+            <img src="assets/images/sa2.jpg" width="150px" class="user-avatar" />
+            <h1>Merchandise Receiving Application </h1>
+            <br/>
+             <h3>LogIn</h3>
+            <form name="form" (ngSubmit)="f.form.valid && onLoggedin()" #f="ngForm" novalidate>
+                <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !username.valid && submitAttempt}">
+                    <input type="text" class="form-control input-underline input-lg" name="username" [(ngModel)]="user.email" placeholder="Email"
+                        #username="ngModel" required pattern="\S+@\S+"
+                        />
+
+                   <!-- <div *ngIf="f.submitted && !username.valid" class="help-block">email is required</div> -->
+                   <div [hidden]="username.valid || username.pristine"
+                   class="alert alert-danger">
+                         
+                           <div [hidden]="!username.hasError('required')">Email is required</div>
+                           <div [hidden]="!username.hasError('pattern')">Email should be valid</div>
+                   </div>
+                </div>
+                <div class="spinner" *ngIf="working">
+                        <div class="bounce1" ></div>
+                        <div class="bounce2" ></div>
+                        <div class="bounce3" ></div>
+                    </div>
+                    
+                <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !password.valid && submitAttempt }">
+                    <input type="password" class="form-control input-underline input-lg" name="password" [(ngModel)]="user.password" placeholder="Password"
+                        #password="ngModel" required  
+                        />
+                   <!-- <div *ngIf="f.submitted && !password.valid" class="help-block">password is required</div> -->
+
+
+                    <div [hidden]="password.valid || password.pristine"
+                    class="alert alert-danger">
+                            <div [hidden]="!password.hasError('required')">Password field is required</div>
+                    </div>
+                    
+                </div>
+          
+                <div class="form-group">
+                    
+                  
+                    <button 
+                     [disabled]="!f.form.valid" type="submit" name="action"  class="btn rounded-btn">Login</button>                                        
+                 
+                   
+
+                </div>
+                <div class="form-group">
+                    
+                  
+                    <span>{{errorMsg}}</span>                                        
+                 
+                  
+
+                </div>
+            
+              
+            </form>
+
+        </div>
+    </div>
+</div>

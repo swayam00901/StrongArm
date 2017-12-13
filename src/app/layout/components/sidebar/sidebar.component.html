@@ -1,0 +1,21 @@
+<nav class="sidebar" [ngClass]="{sidebarPushRight: isActive}">
+    <ul class="list-group">
+        <a routerLink="/dashboard" [routerLinkActive]="['router-link-active']" class="list-group-item">
+            <i class="fa fa-fw fa-dashboard"></i>&nbsp;{{ 'View In-Transit Shipments' | translate }}
+        </a>
+        <a *ngIf="role" [routerLink]="['/charts']" [routerLinkActive]="['router-link-active']" class="list-group-item">
+            <i class="fa fa-fw fa-bar-chart-o"></i>&nbsp;{{ 'Special Handling' | translate }}
+        </a>
+        <a [routerLink]="['/tables']" [routerLinkActive]="['router-link-active']" class="list-group-item">
+            <i class="fa fa-fw fa-table"></i>&nbsp;{{ 'Receiving Logs' | translate }}
+        </a>
+        <a *ngIf="role" [routerLink]= "['/forms']"  [routerLinkActive]= "['router-link-active'] "   class="list-group-item">
+            <i class="fa fa-fw fa-edit"></i>&nbsp;{{ 'Manager Review / Edit'| translate }}
+        </a>
+        <a [routerLink]="['/bs-element']" [routerLinkActive]="['router-link-active']" class="list-group-item">
+            <i class="fa fa-fw fa-desktop"></i>&nbsp;{{ 'Transfer Out' | translate }}
+        </a>       
+    </ul>
+</nav>
+
+<!-- <button [routerLink]="myVar ? ['/myScreen'] : []"></button> -->

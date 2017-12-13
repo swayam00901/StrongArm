@@ -1,0 +1,81 @@
+<div [ngStyle]="{height: config?.height}" style="overflow-y:auto; width:auto; overflow-x:hidden; display:block;" (scroll)="checkScroll($event)">
+  <table class="table dataTable" ngClass="{{config.className || ''}}" role="grid" style="width: 100%;">
+    <thead>
+      <tr role="row">
+        <th *ngIf="expandable"></th>
+        <th *ngFor="let column of columns" [ngTableSorting]="config" [column]="column" (sortChanged)="onChangeTable($event)" ngClass="{{column.className || ''}}">
+          {{column.title}}
+          <i *ngIf="config && column.sort" class="pull-right fa" [ngClass]="{'fa-chevron-down': column.sort === 'desc', 'fa-chevron-up': column.sort === 'asc'}"></i>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngIf="showFilterRow">
+        <td *ngIf="expandable"></td>
+        <td *ngFor="let column of columns">
+          <input *ngIf="column.filtering" placeholder="{{column.filtering.placeholder}}" [ngTableFiltering]="column.filtering" class="form-control"
+            style="width: 85%; padding:none;" (tableChanged)="onChangeTable(config)" />
+        </td>
+      </tr>
+      <ng-template ngFor let-row [ngForOf]="rows" let-i="index">
+        <tr [ngClass]="{'table-info': showExpandedRow && (i == expandedRowIndex) && expandable }">
+          <td (click)="toggleRowExpansion(row, i)" *ngIf="expandable" (click)="cellClick(row, 'expand', i)" style="text-align:center; padding:0px; padding-top:7px;">
+            <a style="width:100%; text-align:center;">
+              <i [ngClass]="{'fa': true, 'fa-plus-circle': i != expandedRowIndex, 'fa-minus-circle' : i == expandedRowIndex}" style="font-size:1.5em; cursor:pointer"></i>
+            </a>
+          </td>
+          <ng-template ngFor let-column [ngForOf]="columns" let-j="index">
+
+            <td (click)="cellClick(row, column.name, i)" *ngIf="!column.isEditing || editingRow != i">
+              <div style="display:inline-block" [innerHtml]="sanitize(getData(row, column.name))"> </div>
+              <span class="pull-right" *ngIf="column.editable && !column.editWith">
+                <i class="fa fa-pencil" aria-hidden="true" (click)="setRowToEdit(i, j)"></i>
+              </span>
+            </td>
+
+            <td *ngIf="column.isEditing && editingRow == i && !column.options">
+              <span *ngIf="!column.showDatePicker">
+                <input class="form-control" style="width:70%;display:inline-block; height:70%;" [value]="getData(row, column.name)" [id]="column.name"
+                  #val (keyup)="updateChanges(column.name, val)">
+                <span class="pull-right" *ngIf="column.editable && !column.editWith">
+                  <i class="fa fa-check-square-o success" aria-hidden="true" (click)="submitChange(row, i, column.name, j, val)"></i>
+                </span>
+
+              </span>
+              <span *ngIf="column.showDatePicker">
+
+
+
+                <input name="dateInput" #dateInput="ngModel" [dpDayPicker]="dateConfig" [(ngModel)]="dateSelected" required pattern="/^(0[1-9]|1[0-2])\-(0[1-9]|1\d|2\d|3[01])\-(19|20)\d{2}$/" class="form-control" style="width:70%;display:inline-block; height:70%;" [value]="getData(row, column.name)"
+                  [id]="column.name" #val (keyup)="updateChanges(column.name, val)" />
+                <span class="pull-right" *ngIf="column.editable && !column.editWith">
+                  <i class="fa fa-check-square-o success" aria-hidden="true" (click)="submitChange(row, i, column.name, j, val)"></i>
+                </span>
+                <div [hidden]="dateInput.valid || dateInput.pristine"
+                class="alert alert-danger">
+                <div [hidden]="!dateInput.hasError('required')">{{column.name}} is required</div>
+                <div [hidden]="!dateInput.hasError('pattern')">{{column.name}}  should be in MM/DD/YYYY</div>
+              </div>
+              </span>
+            </td>
+
+            <td *ngIf="column.isEditing && editingRow == i && column.options">
+              <select class="form-control" style="background-color:yellow;width:70%;display:inline-block;height:70%;" [value]="getData(row, column.name)" [id]="column.name"
+                #val (keyup)="updateChanges(column.name, val)" (mouseup)="updateChanges(column.name, val)">
+                <option style="background-color:yellow" *ngFor="let option of column.options" [value]="option"> {{option}}</option>
+              </select>
+              <span style="background-color:yellow" class="pull-right" *ngIf="column.editable && !column.editWith">
+                <i class="fa fa-check-square-o success" aria-hidden="true" (click)="submitChange(row, i, column.name, j, val)"></i>
+              </span>
+            </td>
+          </ng-template>
+        </tr>
+        <tr *ngIf="showExpandedRow && (i == expandedRowIndex) && expandable" class="table-info">
+          <td [attr.colspan]="columns.length + 1">
+            <ng-table-row [rowComponent]="expandedComponent" [rowInputs]="rowInputs"></ng-table-row>
+          </td>
+        </tr>
+      </ng-template>
+    </tbody>
+  </table>
+</div>

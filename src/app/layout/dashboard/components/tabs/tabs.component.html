@@ -1,0 +1,33 @@
+<div class="row mt-3">
+    <div class="col-sm-18">
+        <div class="card">
+            <div class="card-header">Shipment Details</div>
+            <div class="card-body">
+                <ngb-tabset>
+                    <ngb-tab>
+                            <ng-template ngbTabTitle><b>In Transit DC Shipment</b> </ng-template>
+                        <ng-template ngbTabContent>
+                                <table-demo></table-demo>
+                           
+                        </ng-template>
+                    </ngb-tab>
+                    <ngb-tab>
+                        <ng-template ngbTabTitle><b>In Transit PO Shipment</b> </ng-template>
+                        <ng-template ngbTabContent>
+                               <po-shipment></po-shipment>
+                          
+                        </ng-template>
+                    </ngb-tab>
+                    <ngb-tab>
+                            <ng-template ngbTabTitle><b>In Transit Store Transfer</b> </ng-template>
+                        <ng-template ngbTabContent>
+                                <store-transfer></store-transfer>
+                          
+                        </ng-template>
+                    </ngb-tab>
+                </ngb-tabset>
+            </div>
+        </div>
+    </div>
+   
+</div>
